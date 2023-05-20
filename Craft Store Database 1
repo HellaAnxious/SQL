@@ -1,0 +1,25 @@
+CREATE TABLE craft_store (id INTEGER PRIMARY KEY, transaction_date TEXT, item TEXT, category TEXT, original_price INTEGER, percentage_off INTEGER);
+
+INSERT INTO craft_store VALUES (1, "1/1/23", "Yarn", "Crochet", 10, (100*0.25));
+INSERT INTO craft_store VALUES (2, "1/14/23", "Fabric", "Sewing", 20, (100*0.10));
+INSERT INTO craft_store VALUES (3, "1/23/23", "Thread", "Sewing", 4, (100*0.50));
+INSERT INTO craft_store VALUES (4, "2/4/23", "Paper", "Scrapbook", 4, (100*0.00));
+INSERT INTO craft_store VALUES (5, "6/14/2022", "Scissors", "Tools", 10, (100*0.05));
+INSERT INTO craft_store VALUES (6, "9/2/2022", "Paint", "Painting", 8, (100*0.50));
+INSERT INTO craft_store VALUES (7, "8/12/2022", "Stickers", "Scrapbook", 6, (100*0.35));
+INSERT INTO craft_store VALUES (8, "5/20/2023", "Wreath", "Decor", 35, (100*0.15));
+INSERT INTO craft_store VALUES (9, "4/30/2023", "Vinyl", "Cricut", 10, (100*0.65));
+INSERT INTO craft_store VALUES (10, "5/4/2013", "Buttons", "Sewing", 6, (100*0.25));
+INSERT INTO craft_store VALUES (11, "12/23/2022", "Beads", "Jewlery", 8, (100*0.00));
+INSERT INTO craft_store VALUES (12, "10/31/2022", "Colored_Pencils", "Drawing", 5, (100*0.35));
+INSERT INTO craft_store VALUES (13, "3/26/2023", "Coloring_Book", "Kids", 3, (100*0.25));
+INSERT INTO craft_store VALUES (14, "7/31/2022", "Wall_Art", "Decor", 60, (100*0.40));
+INSERT INTO craft_store VALUES (15, "11/5/2022", "Flowers", "Floral", 18, (100*0.85));
+
+SELECT * FROM craft_store;
+
+SELECT * FROM craft_store ORDER BY original_price;
+
+SELECT SUM(original_price) FROM craft_store;
+
+SELECT COUNT(transaction_date) AS transaction_total FROM craft_store
