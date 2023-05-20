@@ -120,26 +120,25 @@ INSERT INTO sales(transaction_date,product,price,payment_type,name,city,state,co
 INSERT INTO sales(transaction_date,product,price,payment_type,name,city,state,country,account_created,last_login,latitude,longitude) VALUES ('1/14/09 11:19','Chair',1200,'Visa','Jennifer','Jumeira','Dubayy','United Arab Emirates','1/14/09 10:44','1/14/09 21:26',25.2097222,55.2477778);
 INSERT INTO sales(transaction_date,product,price,payment_type,name,city,state,country,account_created,last_login,latitude,longitude) VALUES ('1/13/09 19:39','Chair',1200,'Visa','Jolene','Englewood','CO','United states','1/6/09 22:00','1/14/09 22:02',39.64778,-104.98722);
 
-/*
-What are the sale totals for each product?
-*/
-
-SELECT product, SUM(price) AS Sale_Totals FROM sales GROUP BY product;
+SELECT * from sales;
 
 /*
-Chairs had the highest sales total, how many chairs were sold?
+Which transactions were over $1200 and purchased in the United States?
 */
 
-SELECT COUNT(*) FROM sales WHERE product = "Chair";
+SELECT * from sales WHERE price > 1200 AND country LIKE "United States";
 
 /*
-How many chairs were sold in the United States?
+Which transactions were paid with a Visa or totaled over $5000?
 */
 
-SELECT COUNT(*) FROM sales WHERE country = "United states";
+SELECT * from sales WHERE payment_type LIKE "visa" 
+OR price > 5000;
 
 /*
-What cities had purchases over $1,200?
+Which product had less than $40000 in sales?
 */
 
-SELECT city, SUM(price) > 1200 AS Number_of_Sales_Over_1200 FROM sales GROUP BY city
+SELECT product, SUM(price) AS sales_totals from sales
+GROUP by product
+HAVING sales_totals < 40000
