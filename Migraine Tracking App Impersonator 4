@@ -1,0 +1,35 @@
+/* MIGRAINE TRACKING APP IMPERSONATOR */
+
+CREATE TABLE attack_records
+(id INTEGER PRIMARY KEY AUTOINCREMENT, date TEXT, attack_type TEXT, pain_intensity INTEGER, starting_location TEXT, duration_minutes INTEGER);
+
+INSERT INTO attack_records (date, attack_type, pain_intensity, starting_location, duration_minutes) VALUES ("5/17/23", "tension", 5, "work", 41);
+INSERT INTO attack_records (date, attack_type, pain_intensity, starting_location, duration_minutes) VALUES ("5/15/23", "tension", 5, "work", 690);
+INSERT INTO attack_records (date, attack_type, pain_intensity, starting_location, duration_minutes) VALUES ("5/02/23", "don't know yet", 5, "home", 51);
+
+SELECT * FROM attack_records;
+
+/* UPDATE RECORD */
+
+UPDATE attack_records SET attack_type = "migraine" WHERE id = 3;
+
+SELECT * FROM attack_records
+ORDER BY date ASC;
+
+/* DELETE RECORD */
+
+DELETE FROM attack_records WHERE id = 2;
+
+SELECT * FROM attack_records
+ORDER BY date ASC;
+
+/* ADD COLUMN */
+
+ALTER TABLE attack_records ADD medication TEXT;
+
+/* INSERT NEW RECORD AFTER ADDING NEW COLUMN */
+
+INSERT INTO attack_records (date, attack_type, pain_intensity, starting_location, duration_minutes, medication) VALUES ("5/22/23", "menstrual", 4, "driving", 167, "yes");
+
+SELECT * FROM attack_records
+ORDER BY date;
