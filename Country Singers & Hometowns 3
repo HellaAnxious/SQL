@@ -1,0 +1,52 @@
+CREATE TABLE Singers (ID INTEGER PRIMARY KEY AUTOINCREMENT, Artist TEXT, Title TEXT);
+
+INSERT INTO Singers (artist, title) VALUES ("Jason Aldean", "Tough Crowd");
+INSERT INTO Singers (artist, title) VALUES ("Luke Bryan", "Country On");
+INSERT INTO Singers (artist, title) VALUES ("Morgan Wallen", "Last Night");
+INSERT INTO Singers (artist, title) VALUES ("Bailey Zimmerman", "Where it Ends");
+INSERT INTO Singers (artist, title) VALUES ("Luke Combs", "Fast Car");
+INSERT INTO Singers (artist, title) VALUES ("Jelly Roll", "Save Me");
+INSERT INTO Singers (artist, title) VALUES ("Kane Brown", "Thank God");
+INSERT INTO Singers (artist, title) VALUES ("Gabby Berrett", "I Hope");
+INSERT INTO Singers (artist, title) VALUES ("Kelsea Ballerini", "Peter Pan");
+INSERT INTO Singers (artist, title) VALUES ("Eric Church", "Wrecking Ball");
+
+CREATE TABLE Hometown
+(ID INTEGER PRIMARY KEY AUTOINCREMENT, Artist_ID INTEGER, City TEXT, State TEXT);
+
+INSERT INTO Hometown (Artist_ID, City, State) VALUES (1, "Macon", "Georgia");
+INSERT INTO Hometown (Artist_ID, City, State) VALUES (2, "Leesburg", "Georgia");
+INSERT INTO Hometown (Artist_ID, City, State) VALUES (3, "Sneedville", "Tennessee");
+INSERT INTO Hometown (Artist_ID, City, State) VALUES (4, "Louisville", "Illinois");
+INSERT INTO Hometown (Artist_ID, City, State) VALUES (5, "Charlotte", "North Carolina");
+INSERT INTO Hometown (Artist_ID, City, State) VALUES (6, "Chattanooga", "Georgia");
+INSERT INTO Hometown (Artist_ID, City, State) VALUES (7, "Nashville", "Tennessee");
+INSERT INTO Hometown (Artist_ID, City, State) VALUES (8, "Munhall", "Pennsylvania");
+INSERT INTO Hometown (Artist_ID, City, State) VALUES (9, "Mascot", "Tennessee");
+INSERT INTO Hometown (Artist_ID, City, State) VALUES (0, "Roy", "Utah");
+
+SELECT * FROM singers;
+
+SELECT * FROM hometown;
+
+/* List of artists and the state they are from.  */
+
+SELECT artist, state FROM singers
+JOIN hometown
+ON singers.id = hometown.artist_id;
+
+/* List the songs that are sang by artist from Georgia  */
+
+SELECT artist, title, state FROM singers
+JOIN hometown
+ON singers.id = hometown.artist_id
+WHERE hometown.state = "Georgia";
+
+/* List ALL artists & their songs who are not from Tennessee. */
+
+SELECT singers.artist, singers.title, hometown.city, hometown.state
+FROM singers
+LEFT OUTER JOIN hometown
+ON singers.id = hometown.artist_id
+WHERE state IS NOT "Tennessee"
+ORDER BY artist;
