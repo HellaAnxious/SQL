@@ -1,0 +1,59 @@
+/* In this SQL, I'm querying a database with multiple tables in it to quantify statistics about customer and order data. */
+
+--How many orders were placed in January?
+
+SELECT COUNT(*)
+FROM BIT_DB.JanSales
+WHERE length(orderID) = 6
+AND orderID <> 'Order ID';
+
+--How many of those orders were for an iPhone?
+
+SELECT COUNT(Product) AS January_iPhone_Sales
+FROM BIT_DB.JanSales
+WHERE length(orderID) = 6
+AND orderID <> 'Order ID'
+AND product = "iPhone";
+
+--Select the customer account numbers for all the orders that were placed in February.
+
+SELECT acctnum
+FROM BIT_DB.FebSales
+JOIN BIT_DB.customers
+ON FebSales.orderID = customers.order_id
+WHERE length(orderID) = 6
+AND orderID <> 'Order ID'
+GROUP BY acctnum
+ORDER BY acctnum ASC;
+
+--Which product was the cheapest one sold in January, and what was the price?
+
+SELECT MIN(price), Product
+FROM BIT_DB.JanSales
+WHERE length(orderID) = 6
+AND orderID <> 'Order ID';
+
+--What is the total revenue for each product sold in January? 
+
+SELECT Product, SUM(Quantity)*price AS Total_Revenue
+FROM BIT_DB.JanSales
+GROUP BY Product;
+
+--Which products were sold in February at 548 Lincoln St, Seattle, WA 98101, how many of each were sold, and what was the total revenue?
+
+SELECT Product, Quantity, SUM(price*Quantity) AS Total_Revenue
+FROM BIT_DB.FebSales
+WHERE length(orderID) = 6
+AND orderID <> 'Order ID'
+AND location LIKE "548 Lincoln St, Seattle, WA 98101"
+GROUP BY Product;
+
+--How many customers ordered more than 2 products at a time in February, and what was the average amount spent for those customers?
+
+SELECT COUNT(acctnum) AS Customers, AVG(Quantity*price) AS Average_Spent
+FROM BIT_DB.FebSales
+JOIN BIT_DB.customers
+ON FebSales.orderID = customers.order_id
+WHERE length(orderID) = 6
+AND orderID <> 'Order ID'
+AND Quantity > 2;
