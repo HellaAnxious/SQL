@@ -1,0 +1,74 @@
+--For this project, I downloaded Spotify data from Kaggle.
+--Then I created a table to insert Spotify data into.
+--Finally, I performed analytics on the data using SQL. 
+
+-- Creating the table
+
+CREATE TABLE BIT_DB.Spotifydata (
+id integer PRIMARY KEY,
+artist_name varchar NOT NULL,
+track_name varchar NOT NULL,
+track_id varchar NOT NULL,
+popularity integer NOT NULL,
+danceability decimal(4,3) NOT NULL,
+energy decimal(4,3) NOT NULL,
+song_key integer NOT NULL,
+loudness decimal(5,3) NOT NULL,
+song_mode integer NOT NULL,
+speechiness decimal(5,4) NOT NULL,
+acousticness decimal(6,5) NOT NULL,
+instrumentalness decimal(8,7) NOT NULL,
+liveness decimal(5,4) NOT NULL,
+valence decimal(4,3) NOT NULL,
+tempo decimal(6,3) NOT NULL,
+duration_ms integer NOT NULL,
+time_signature integer NOT NULL )
+
+--Then I inserted the Spotify Data .csv into the table.
+
+--Next, I explored the data using the following SQL. 
+
+SELECT * FROM BIT_DB.SPOTIFYDATA;
+
+--What are the best 20 songs to put on an exercise playlist because they have a fast tempo?
+
+SELECT track_name
+FROM BIT_DB.Spotifydata
+GROUP BY track_name
+ORDER BY tempo DESC
+LIMIT 20;
+
+--List the songs and their artist from most popular to least popular.
+
+SELECT track_name, artist_name
+FROM BIT_DB.SPOTIFYDATA
+ORDER BY popularity DESC;
+
+--Which artists have more than one song in this Top 50?
+
+SELECT artist_name, COUNT(artist_name) AS Number_of_Songs
+FROM BIT_DB.SPOTIFYDATA
+GROUP BY artist_name
+HAVING COUNT(artist_name) > 1
+ORDER BY Number_of_Songs DESC;
+
+--Which songs are above and which ones are below average in terms of song length? (3min, 30sec)
+
+SELECT track_name, duration_ms,
+    CASE
+        WHEN ((duration_ms/1000)/60) < 3.5 THEN "Below Average"
+        WHEN ((duration_ms/1000)/60) > 3.5 THEN "Above Average"
+        ELSE "Average"
+    END AS "Song Length"
+FROM BIT_DB.Spotifydata;
+
+--How many songs fall into each category of above song lenths? (Above/Below Average)
+
+SELECT COUNT(*),
+    CASE
+        WHEN ((duration_ms/1000)/60) < 3.5 THEN "Below Average"
+        WHEN ((duration_ms/1000)/60) > 3.5 THEN "Above Average"
+        ELSE "Average"
+    END AS "Song_Length"
+FROM BIT_DB.Spotifydata
+GROUP BY Song_Length
