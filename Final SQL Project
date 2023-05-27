@@ -1,0 +1,141 @@
+## This is my "final" SQL project I did while learning SQL
+
+-- 1 Show customers (full names, customer ID, and country) who are not in the US.
+
+SELECT customers.FirstName, customers.LastName, customers.CustomerID, customers.country
+FROM chinook.customers
+WHERE customers.country <> 'USA';
+
+-- 2 Show only the customers from Brazil
+
+SELECT customers.FirstName, customers.LastName, customers.CustomerID, customers.country
+FROM chinook.customers
+WHERE customers.country = 'Brazil';
+
+-- 3 Find the invoices of customers who are from Brazil. (Table should include
+-- customer's full name, invoice ID, date, and billing country).
+
+SELECT customers.FirstName, customers.LastName, invoices.InvoiceID, invoices.InvoiceDate,
+invoices.BillingCountry
+FROM chinook.customers
+JOIN chinook.invoices
+ON customers.CustomerID = invoices.CustomerID
+WHERE customers.country = 'Brazil';
+
+-- 4 Show the employees who are sales agents.
+
+SELECT * 
+FROM chinook.employees
+WHERE Title LIKE '%Sales%';
+
+-- 5 Find a unique/distint list of billing countries from the invoice table.
+
+SELECT DISTINCT invoices.BillingCountry
+FROM chinook.invoices;
+
+-- 6 Provide a query that shows the invoices associated with each sales agent.
+-- Table should include the agent's full name.
+
+SELECT employees.firstname, employees.lastname, invoices.invoiceid
+FROM chinook.employees
+JOIN chinook.customers
+ON customers.supportrepid = employees.employeeid
+JOIN chinook.invoices
+ON invoices.customerid = customers.customerid;
+
+-- 7 Show the invoice total, customer name, country and sales agent for all invoices &
+-- customers.
+
+SELECT CUS.FirstName as 'Customer First Name', CUS.LastName as 'Customer Last Name', 
+CUS.Country as 'Customer Country', EMP.FirstName as 'Sales Agent First Name', 
+EMP.LastName as 'Sales Agent Last Name', INV.total as 'Invoice Total'
+FROM chinook.invoices INV
+JOIN chinook.customers CUS
+ON CUS.customerid = INV.customerid
+JOIN chinook.employees EMP
+ON EMP.employeeid = CUS.supportrepid;
+
+-- 8 How many invoices where there in 2009?
+
+SELECT COUNT(*)
+FROM chinook.invoices
+WHERE invoicedate LIKE '%2009%';
+
+-- 9 What are the total sales for 2009?
+
+SELECT SUM(total)
+FROM chinook.invoices
+WHERE invoicedate LIKE '%2009%';
+
+-- 10 Write a query that includes the purchased track name with each invoice line ID.
+
+SELECT i.invoicelineid, t.name
+FROM chinook.invoice_items i
+JOIN chinook.tracks t
+ON i.trackid = t.trackid;
+
+-- 11 Write a query that includes the purchased track name AND artist name with each
+-- invoice line ID.
+
+SELECT i.invoicelineid, t.name, art.name 
+FROM chinook.artists art
+JOIN chinook.albums alb
+ON art.artistid = alb.artistid
+JOIN chinook.tracks t
+ON alb.albumid = t.albumid
+JOIN chinook.invoice_items i
+ON i.trackid = t.trackid;
+
+-- 12 Provide a query that shows all the tracks, and include the album name, media type,
+-- and genre.
+
+SELECT t.name as 'Track', a.title as 'Album', m.name as 'Type', g.name as 'Genre'
+FROM chinook.genres g
+JOIN chinook.tracks t
+ON g.genreid = t.genreid
+JOIN chinook.albums a
+ON t.albumid = a.albumid
+JOIN chinook.media_types m
+ON t.mediatypeid = m.mediatypeid;
+
+-- 13 Show the total sales made by each sales agent.
+
+SELECT ROUND(SUM(i.total), 2) as 'Sale Totals', e.firstname, e.lastname
+FROM chinook.invoices i
+JOIN chinook.customers c
+ON i.customerid = c.customerid
+LEFT JOIN chinook.employees e
+ON c.supportrepid = e.employeeid
+GROUP BY e.employeeid;
+
+-- 14 Which sales agent made the most dollars in sales in 2009?
+
+SELECT ROUND(SUM(i.total), 2) as 'Sale Totals', e.firstname, e.lastname
+FROM chinook.invoices i
+JOIN chinook.customers c
+ON i.customerid = c.customerid
+LEFT JOIN chinook.employees e
+ON c.supportrepid = e.employeeid
+WHERE i.invoicedate LIKE '%2009%'
+GROUP BY e.firstname
+ORDER BY 'Sale_Totals' DESC
+LIMIT 1;
+
+-- 15 List 10 billing cities that had the most sales.
+
+SELECT i.BillingCity, ROUND(SUM(i.total), 2) as Total_Sales
+FROM chinook.invoices i
+GROUP BY BillingCity
+ORDER BY ROUND(SUM(i.total), 2) DESC
+LIMIT 10;
+
+-- How many tracks were sold in 2009's top billing cities?
+
+SELECT i.BillingCity, ROUND(SUM(i.total), 2) as Total_Sales, SUM(ii.quantity)
+FROM chinook.invoices i
+JOIN chinook.invoice_items ii
+ON i.invoiceid = ii.invoiceid
+WHERE i.invoicedate LIKE '%2009%'
+GROUP BY BillingCity
+ORDER BY ROUND(SUM(i.total), 2) DESC
+LIMIT 10;
